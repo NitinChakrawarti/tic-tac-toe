@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      .msg{
+        font-size: 3rem;
+        color: #f18805;
+        font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      }
+      #reset {
+        padding: 0.5rem;
+        color: black;
+        background-color: #A80874;
+        font-size: 1rem;
+        border-radius: 4rem;
+        margin-top: 3rem;
+      }
+      #reset:hover{
+        scale: 1.5;
+      }
+
+      #parent {
+        background-color: #0b7189;
+        align-items: center;
+        text-align: center;
+      }
+
+      #game {
+        display: flex;
+        flex-wrap: wrap;
+        height: 60vmin;
+        width: 60vmin;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .box {
+        height: 18vmin;
+        width: 18vmin;
+        background-color: #f3ffbd;
+
+        border-radius: 2rem;
+        font-size: 8vmin;
+        color: #ff1654;
+        font-weight: 700;
+      }
+
+      .hide {
+        visibility: hidden;
+      }
+
+     
+      .parent {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+
+      .win{
+        background-color:#2B9720 ;
+        color: #090c08;
+      }
+    </style>
+  </head>
+
+  <body id="parent">
+    <div class="msg hide">
+      <p class="msg">----- won</p>
+    </div>
+    <h1 style="color: #f45b69" font-weight="800">Let's play</h1>
+
+    <div class="parent">
+      <div id="game">
+        <button class="box"></button>
+        <button class="box"></button>
+        <button class="box"></button>
+        <button class="box"></button>
+        <button class="box"></button>
+        <button class="box"></button>
+        <button class="box"></button>
+        <button class="box"></button>
+        <button class="box"></button>
+      </div>
+    </div>
+
+    <button id="reset"><b>Reset </b></button>
+
+    <script>
+      let boxes = document.querySelectorAll(".box");
+      let reset = document.querySelector("#reset");
+      let div = document.querySelector(".hide");
+      let new_game = document.querySelector("#new_game");
+      let msg = document.querySelector(".msg");
+
+      let turn0 = true;
+
+      const winPattern = [
+        [0, 1, 2],
+        [0, 3, 6],
+        [0, 4, 8],
+        [1, 4, 7],
+        [2, 5, 8],
+        [2, 4, 6],
+        [3, 4, 5],
+        [6, 7, 8],
+      ];
+
+      const resetgame = () => {
+        turn0 = true;
+        enablebox();
+        msg.classList.add("hide");
+      };
+
+      boxes.forEach((box) => {
+        box.addEventListener("click", () => {
+          if (turn0) {
+            box.innerText = "O";
+            turn0 = false;
+          } else {
+            box.innerText = "x";
+            turn0 = true;
+          }
+          box.disabled = true;
+          checkwinner();
+        });
+      });
+      const disablebox = () => {
+        for (let box of boxes) {
+          box.disabled = true;
+        }
+      };
+
+      const enablebox = () => {
+        for (let box of boxes) {
+          box.disabled = false;
+          box.innerText = "";
+        }
+      };
+
+      const checkwinner = () => {
+        for (let condi of winPattern) {
+          let pos1val = boxes[condi[0]].innerText;
+          let pos2val = boxes[condi[1]].innerText;
+          let pos3val = boxes[condi[2]].innerText;
+          if (pos1val != "" && pos2val != "" && pos3val != "") {
+            if (pos1val == pos2val && pos2val == pos3val) {
+              div.classList.remove("hide");
+              
+              msg.innerText = `${pos1val} --- Won`;
+              disablebox();
+            }
+          }
+        }
+      };
+      reset.addEventListener("click", resetgame);
+    </script>
+  </body>
+</html>
